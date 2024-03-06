@@ -22,32 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
     return distance <= circle.radius;
   }
 
-  function updateHitStatus(event) {
-    const x = event.clientX - canvas.getBoundingClientRect().left;
-    const y = event.clientY - canvas.getBoundingClientRect().top;
-
-    let hit = false;
-    for (let i = circles.length - 1; i >= 0; i--) {
-      if (hitTest(x, y, circles[i])) {
-        hit = true;
-        break;
-      }
-    }
-
-    console.log(hit ? "Hit" : "Miss");
-  }
-
   function deleteCircle(event) {
     const x = event.clientX - canvas.getBoundingClientRect().left;
     const y = event.clientY - canvas.getBoundingClientRect().top;
 
-    for (let i = circles.length - 1; i >= 0; i--) {
-      if (hitTest(x, y, circles[i])) {
-        circles.splice(i, 1);
-        redrawCanvas();
-        break; // Exit loop after deleting one circle
-      }
-    }
+    circles = circles.filter((circle) => !hitTest(x, y, circle));
+    redrawCanvas();
   }
 
   function redrawCanvas() {
@@ -84,8 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   canvas.addEventListener("dblclick", deleteCircle);
-
-  canvas.addEventListener("click", updateHitStatus);
 
   resetBtn.addEventListener("click", () => {
     circles = [];
