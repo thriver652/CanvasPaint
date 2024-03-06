@@ -37,6 +37,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function displayOverlay(message, color, x, y) {
+    const overlay = document.createElement("div");
+    overlay.className = "hit-overlay";
+    overlay.textContent = message;
+    overlay.style.left = `${x}px`;
+    overlay.style.top = `${y}px`;
+    overlay.style.color = color;
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+      overlay.remove();
+    }, 1000);
+  }
+
+  function updateHitStatus(event) {
+    const x = event.clientX - canvas.getBoundingClientRect().left;
+    const y = event.clientY - canvas.getBoundingClientRect().top;
+
+    let hit = false;
+    for (let i = circles.length - 1; i >= 0; i--) {
+      if (hitTest(x, y, circles[i])) {
+        hit = true;
+        break;
+      }
+    }
+
+    const resultText = hit ? "Hit!" : "Miss!";
+    const resultColor = hit ? "green" : "red";
+
+    displayOverlay(
+      resultText,
+      resultColor,
+      canvas.width / 2,
+      canvas.height / 2
+    );
+  }
+
   canvas.addEventListener("mousedown", (event) => {
     isDrawing = true;
     const x = event.clientX - canvas.getBoundingClientRect().left;
@@ -64,6 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   canvas.addEventListener("dblclick", deleteCircle);
+
+  canvas.addEventListener("click", updateHitStatus);
 
   resetBtn.addEventListener("click", () => {
     circles = [];
