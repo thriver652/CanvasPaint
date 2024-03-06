@@ -56,7 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const y = event.clientY - canvas.getBoundingClientRect().top;
 
     let hit = false;
-    for (let i = circles.length - 1; i >= 0; i--) {
+
+    // Check hit status for circles (excluding the first one)
+    for (let i = circles.length - 1; i > 0; i--) {
       if (hitTest(x, y, circles[i])) {
         hit = true;
         break;
@@ -66,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultText = hit ? "Hit!" : "Miss!";
     const resultColor = hit ? "green" : "red";
 
+    // Display hit or miss overlay at the center of the canvas
     displayOverlay(
       resultText,
       resultColor,
